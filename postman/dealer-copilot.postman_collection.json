@@ -1,0 +1,836 @@
+{
+  "info": {
+    "name": "Dealer Copilot API",
+    "description": "Contract and behaviour tests for the Dealer Copilot API. Read-only except where noted; the consultation test is rejected by the server before anything is written.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4700"
+    }
+  ],
+  "item": [
+    {
+      "name": "Platform",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 and database up\", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().db).to.eql(true); });",
+                  "pm.test(\"approved-use table is loaded\", () => pm.expect(pm.response.json().data.approvedUses).to.be.above(500));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "OpenAPI spec",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/openapi.json",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "openapi.json"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const s = pm.response.json();",
+                  "pm.test(\"is OpenAPI 3\", () => pm.expect(s.openapi).to.match(/^3\\./));",
+                  "pm.test(\"documents the stateless advice endpoints\", () => [\"/api/v1/recommend\", \"/api/v1/check-product\", \"/api/v1/tank-mix\"].forEach((p) => pm.expect(s.paths).to.have.property(p)));",
+                  "pm.test(\"request schemas generated from zod\", () => pm.expect(s.components.schemas).to.have.property(\"RecommendRequest\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reference data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reference",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reference"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"four crops\", () => pm.expect(r.crops.map((c) => c.id)).to.have.members([\"cotton\", \"paddy\", \"tomato\", \"chilli\"]));",
+                  "pm.test(\"pests have Hindi names\", () => r.pests.forEach((p) => pm.expect(p.hi).to.be.a(\"string\").and.not.empty));",
+                  "pm.test(\"data source is CIB&RC\", () => pm.expect(r.dataSource.name).to.include(\"CIB&RC\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Advice (stateless)",
+      "item": [
+        {
+          "name": "Recommend: three brands, one chemistry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/recommend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "recommend"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": {\n    \"crop\": \"cotton\",\n    \"sowingDate\": \"2026-06-20\",\n    \"areaAcres\": 2\n  },\n  \"history\": [\n    {\n      \"date\": \"2026-09-25\",\n      \"formKey\": \"thiamethoxam@25|WG\",\n      \"label\": \"Actara\",\n      \"actives\": [\n        \"thiamethoxam\"\n      ]\n    },\n    {\n      \"date\": \"2026-10-12\",\n      \"formKey\": \"imidacloprid@17.8|SL\",\n      \"label\": \"Confidor\",\n      \"actives\": [\n        \"imidacloprid\"\n      ]\n    },\n    {\n      \"date\": \"2026-10-28\",\n      \"formKey\": \"acetamiprid@20|SP\",\n      \"label\": \"Local 20 SP\",\n      \"actives\": [\n        \"acetamiprid\"\n      ]\n    }\n  ],\n  \"pestId\": \"whitefly\",\n  \"today\": \"2026-11-09\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"counts three Group 4A sprays\", () => pm.expect(r.groupUseCounts[\"IRAC:4A\"]).to.eql(3));",
+                  "pm.test(\"every neonicotinoid option is blocked\", () => {",
+                  "  const neo = r.options.filter((o) => o.groups.some((g) => g.code === \"IRAC:4A\"));",
+                  "  pm.expect(neo.length).to.be.above(0);",
+                  "  neo.forEach((o) => pm.expect(o.status).to.eql(\"blocked\"));",
+                  "});",
+                  "pm.test(\"top option is usable and from another group\", () => {",
+                  "  pm.expect(r.options[0].status).to.not.eql(\"blocked\");",
+                  "  pm.expect(r.options[0].groups.map((g) => g.code)).to.not.include(\"IRAC:4A\");",
+                  "});",
+                  "pm.test(\"every option cites its CIB&RC page\", () => r.options.forEach((o) => pm.expect(o.source.page).to.be.a(\"number\")));",
+                  "pm.test(\"reasons are bilingual\", () => r.options[0].reasons.forEach((x) => { pm.expect(x.en).to.be.a(\"string\"); pm.expect(x.hi).to.be.a(\"string\"); }));",
+                  "pm.test(\"responds quickly\", () => pm.expect(pm.response.responseTime).to.be.below(1500));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recommend: waiting period blocks near harvest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/recommend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "recommend"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": {\n    \"crop\": \"tomato\",\n    \"sowingDate\": \"2026-08-01\",\n    \"areaAcres\": 1,\n    \"nextHarvestDate\": \"2026-11-11\"\n  },\n  \"history\": [],\n  \"pestId\": \"fruit_borer\",\n  \"today\": \"2026-11-09\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"2 days to harvest\", () => pm.expect(r.daysToHarvest).to.eql(2));",
+                  "pm.test(\"options with a longer waiting period are blocked\", () => r.options.filter((o) => o.phiDays > 2).forEach((o) => {",
+                  "  pm.expect(o.status).to.eql(\"blocked\");",
+                  "  pm.expect(o.reasons.map((x) => x.code)).to.include(\"PHI_EXCEEDS_HARVEST\");",
+                  "}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recommend: validation error",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/recommend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "recommend"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": {\n    \"crop\": \"wheat\"\n  },\n  \"pestId\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 VALIDATION\", () => { pm.response.to.have.status(400); pm.expect(pm.response.json().error.code).to.eql(\"VALIDATION\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recommend: unknown pest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/recommend",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "recommend"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": {\n    \"crop\": \"cotton\",\n    \"sowingDate\": \"2026-06-20\",\n    \"areaAcres\": 2\n  },\n  \"history\": [],\n  \"pestId\": \"dragon\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 BAD_PEST\", () => { pm.response.to.have.status(400); pm.expect(pm.response.json().error.code).to.eql(\"BAD_PEST\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Check product: Actara on chilli thrips",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/check-product",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "check-product"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": {\n    \"crop\": \"chilli\",\n    \"sowingDate\": \"2026-07-01\",\n    \"areaAcres\": 1\n  },\n  \"history\": [],\n  \"pestId\": \"thrips\",\n  \"formKey\": \"thiamethoxam@25|WG\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"not approved for this crop\", () => { pm.expect(r.approved).to.eql(false); pm.expect(r.reasons[0].en).to.match(/not approved for this crop/i); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Check product: unregistered formulation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/check-product",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "check-product"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field\": {\n    \"crop\": \"cotton\",\n    \"sowingDate\": \"2026-06-20\",\n    \"areaAcres\": 2\n  },\n  \"history\": [],\n  \"pestId\": \"whitefly\",\n  \"formKey\": \"thiamethoxam@30|EC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"flagged as not in the registered list\", () => pm.expect(pm.response.json().reasons[0].en).to.include(\"not in the CIB&RC registered list\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tank mix: two neonicotinoids",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tank-mix",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "tank-mix"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"label\": \"Actara\",\n      \"actives\": [\n        \"thiamethoxam\"\n      ]\n    },\n    {\n      \"label\": \"Confidor\",\n      \"actives\": [\n        \"imidacloprid\"\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"one same-group warning\", () => { pm.expect(r.issues).to.have.length(1); pm.expect(r.issues[0].severity).to.eql(\"warn\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Products: search by brand",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products?q=actara",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "actara"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const p = pm.response.json().products[0];",
+                  "pm.test(\"Actara first, mapped to IRAC 4A\", () => { pm.expect(p.brand).to.eql(\"Actara\"); pm.expect(p.groups[0].code).to.eql(\"IRAC:4A\"); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vision (demo samples)",
+      "item": [
+        {
+          "name": "Scan: suspect bottle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/scan-label",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-label"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sampleId\": \"suspect\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const it = pm.response.json().items[0];",
+                  "pm.test(\"OCR typo normalised\", () => pm.expect(it.actives[0].name).to.eql(\"thiamethoxam\"));",
+                  "pm.test(\"not registered\", () => pm.expect(it.registered).to.eql(false));",
+                  "pm.test(\"look-alike brand flagged\", () => pm.expect(it.checks.map((c) => c.en).join(\" \")).to.include('Brand \"Actara\" is normally'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Scan: shop bill with three items",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/scan-label",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-label"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sampleId\": \"bill\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const items = pm.response.json().items;",
+                  "pm.test(\"three items\", () => pm.expect(items).to.have.length(3));",
+                  "pm.test(\"each mapped to a mode of action\", () => items.forEach((i) => pm.expect(i.groups.length).to.be.above(0)));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Counter",
+      "item": [
+        {
+          "name": "Farmer lookup: invalid phone",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/farmers?phone=12345",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farmers"
+              ],
+              "query": [
+                {
+                  "key": "phone",
+                  "value": "12345"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 INVALID_PHONE\", () => { pm.response.to.have.status(400); pm.expect(pm.response.json().error.code).to.eql(\"INVALID_PHONE\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Farmer lookup: demo farmer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/farmers?phone=9876543210",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farmers"
+              ],
+              "query": [
+                {
+                  "key": "phone",
+                  "value": "9876543210"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"found, phone never returned\", () => { pm.expect(r.farmer.phone_last4).to.eql(\"3210\"); pm.expect(JSON.stringify(r)).to.not.include(\"9876543210\"); });",
+                  "pm.collectionVariables.set(\"fieldId\", r.fields[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Field with spray history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/fields/{{fieldId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "fields",
+                "{{fieldId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"has a spray history with MoA groups\", () => { pm.expect(r.sprays.length).to.be.at.least(3); r.sprays.forEach((s) => pm.expect(s.groups).to.be.an(\"array\")); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultation: selling a blocked option is refused",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/consultations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "consultations"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fieldId\": \"{{fieldId}}\",\n  \"pestId\": \"whitefly\",\n  \"chosen\": {\n    \"formKey\": \"thiamethoxam@25|WG\",\n    \"label\": \"Actara\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"409 BLOCKED (server re-runs the rules)\", () => { pm.response.to.have.status(409); pm.expect(pm.response.json().error.code).to.eql(\"BLOCKED\"); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Monitoring",
+      "item": [
+        {
+          "name": "Traps: pink bollworm in Yavatmal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/traps?district=yavatmal&pest=pink_bollworm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "traps"
+              ],
+              "query": [
+                {
+                  "key": "district",
+                  "value": "yavatmal"
+                },
+                {
+                  "key": "pest",
+                  "value": "pink_bollworm"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"ICAR-CICR threshold\", () => { pm.expect(r.threshold.etlMothsPerTrapPerDay).to.eql(8); pm.expect(r.threshold.consecutiveDays).to.eql(3); });",
+                  "pm.test(\"status is one of the known levels\", () => pm.expect([\"above\", \"watch\", \"below\", \"no_data\"]).to.include(r.status.level));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Weather: spray window",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/weather?district=yavatmal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "weather"
+              ],
+              "query": [
+                {
+                  "key": "district",
+                  "value": "yavatmal"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"200 with availability flag\", () => { pm.response.to.have.status(200); pm.expect(r).to.have.property(\"available\"); });",
+                  "if (r.available) pm.test(\"hours are assessed\", () => pm.expect([\"good\", \"ok\", \"bad\"]).to.include(r.now.verdict));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Insights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/insights",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "insights"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test(\"aggregates only\", () => { pm.expect(r.totals.fields).to.be.above(0); pm.expect(JSON.stringify(r)).to.not.include(\"phone_hash\"); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

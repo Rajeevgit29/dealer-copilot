@@ -1,0 +1,119 @@
+{
+  "at": "2026-11-25T17:12:47.611Z",
+  "base": "http://localhost:4700",
+  "summary": {
+    "images": 6,
+    "itemsExpected": 8,
+    "formulationAccuracy": "8/8",
+    "registrationCheck": "8/8",
+    "labelChecks": "5/5",
+    "extraItems": 0,
+    "latencyMs": {
+      "p50": 4640,
+      "max": 5735
+    }
+  },
+  "rows": [
+    {
+      "file": "l1.png",
+      "ms": 4640,
+      "got": [
+        {
+          "formKey": "thiamethoxam@25|WG",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list."
+          ]
+        }
+      ],
+      "notes": []
+    },
+    {
+      "file": "l2.png",
+      "ms": 5331,
+      "got": [
+        {
+          "formKey": "profenofos@50|EC",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list.",
+            "bad: Expired on 2025-05."
+          ]
+        }
+      ],
+      "notes": []
+    },
+    {
+      "file": "l3.png",
+      "ms": 3255,
+      "got": [
+        {
+          "formKey": "thiamethoxam@30|EC",
+          "registered": false,
+          "checks": [
+            "bad: This formulation (ingredient + strength + type) is not in the CIB&RC registered list. Possible spurious or misread label.",
+            "bad: Brand \"Actara\" is normally Thiamethoxam 25 % WG. The label shows something different.",
+            "warn: No CIR registration number found on the label."
+          ]
+        }
+      ],
+      "notes": []
+    },
+    {
+      "file": "l4.png",
+      "ms": 5735,
+      "got": [
+        {
+          "formKey": "chlorantraniliprole@9.3+lambda-cyhalothrin@4.6|ZC",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list."
+          ]
+        }
+      ],
+      "notes": []
+    },
+    {
+      "file": "l5.png",
+      "ms": 4418,
+      "got": [
+        {
+          "formKey": "imidacloprid@17.8|SL",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list."
+          ]
+        }
+      ],
+      "notes": []
+    },
+    {
+      "file": "l6.png",
+      "ms": 2447,
+      "got": [
+        {
+          "formKey": "diafenthiuron@50|WP",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list."
+          ]
+        },
+        {
+          "formKey": "lambda-cyhalothrin@5|EC",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list."
+          ]
+        },
+        {
+          "formKey": "flonicamid@50|WG",
+          "registered": true,
+          "checks": [
+            "ok: Formulation is in the CIB&RC registered list."
+          ]
+        }
+      ],
+      "notes": []
+    }
+  ]
+}

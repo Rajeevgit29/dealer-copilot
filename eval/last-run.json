@@ -1,0 +1,75 @@
+{
+  "at": "2026-11-25T17:13:53.947Z",
+  "scenarios": [
+    {
+      "id": "three-brands-one-chemistry",
+      "pass": true,
+      "note": "Cotton whitefly after Actara, Confidor and a local acetamiprid",
+      "recommended": 41,
+      "blocked": 25
+    },
+    {
+      "id": "one-neonic-ten-days-ago",
+      "pass": true,
+      "note": "Cotton jassid, a neonicotinoid 10 days ago",
+      "recommended": 15,
+      "blocked": 35
+    },
+    {
+      "id": "old-spray-is-a-new-generation",
+      "pass": true,
+      "note": "Cotton jassid, the only neonicotinoid was 40 days ago",
+      "recommended": 3,
+      "blocked": 52
+    },
+    {
+      "id": "two-days-to-picking",
+      "pass": true,
+      "note": "Tomato fruit borer, picking in 2 days",
+      "recommended": 5,
+      "blocked": 35
+    },
+    {
+      "id": "chilli-diamide-twice",
+      "pass": true,
+      "note": "Chilli thrips after two diamide sprays",
+      "recommended": 19,
+      "blocked": 11
+    },
+    {
+      "id": "paddy-strobilurin-then-blast",
+      "pass": true,
+      "note": "Paddy blast, azoxystrobin was the last spray",
+      "recommended": 30,
+      "blocked": 43
+    },
+    {
+      "id": "pbw-pheromone",
+      "pass": true,
+      "note": "Cotton pink bollworm, no history",
+      "recommended": 10,
+      "blocked": 7
+    },
+    {
+      "id": "early-pyrethroid",
+      "pass": true,
+      "note": "Cotton American bollworm at 50 days",
+      "recommended": 32,
+      "blocked": 0
+    },
+    {
+      "id": "paddy-bph-clean",
+      "pass": true,
+      "note": "Paddy BPH, no history, 60 days old",
+      "recommended": 81,
+      "blocked": 1
+    }
+  ],
+  "invariantFailures": [],
+  "baseline": {
+    "model": "gemini-3.5-flash-lite",
+    "answered": 7,
+    "repeats": 1,
+    "offLabel": 1
+  }
+}

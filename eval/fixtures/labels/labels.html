@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Synthetic label fixtures</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Archivo+Narrow:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;padding:24px;background:#d9d4ca;font-family:"Archivo Narrow",Arial,sans-serif;display:flex;flex-wrap:wrap;gap:24px}
+  .label{width:420px;background:#fff;border-radius:6px;padding:18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.2);position:relative;color:#111}
+  .brand{font-size:34px;font-weight:700;letter-spacing:.5px}
+  .comp{font-size:18px;font-weight:700;margin-top:6px}
+  .small{font-size:12px;line-height:1.45;margin-top:8px}
+  .tri{position:absolute;right:18px;top:18px;width:0;height:0;border-left:34px solid transparent;border-right:34px solid transparent}
+  .yellow{border-bottom:58px solid #f2c200}.blue{border-bottom:58px solid #1f5fbf}.green{border-bottom:58px solid #2e8b3a}
+  .tri span{position:absolute;top:22px;left:-30px;width:60px;text-align:center;font-size:9px;font-weight:700;color:#000}
+  .band{margin:10px -20px 0;padding:6px 20px;background:#14532d;color:#fff;font-size:13px;font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px} td,th{border:1px solid #999;padding:4px 6px;text-align:left}
+  .bill{width:520px;background:#fffdf5;font-family:"Courier New",monospace}
+  .deva{font-family:"Noto Sans Devanagari",sans-serif}
+</style></head><body>
+
+<div class="label" id="l1">
+  <div class="tri blue"><span>CAUTION</span></div>
+  <div class="brand">KRISHI RAKSHAK 25</div>
+  <div class="comp">Thiamethoxam 25% WG</div>
+  <div class="small">(Water Dispersible Granules)<br>For control of whitefly, jassids and aphids in cotton.</div>
+  <div class="band">Net Contents: 100 g</div>
+  <div class="small">Mfd. by: Demo Agro Formulations Pvt. Ltd., Plot 14, MIDC, Jalna (MH)<br>
+  CIR No.: 99,123/2024-Thiamethoxam (WG) (Demo)-01<br>
+  Batch No.: TK-2408 &nbsp; Mfg. Date: 08/2026 &nbsp; Expiry Date: 07/2028</div>
+</div>
+
+<div class="label" id="l2">
+  <div class="tri yellow"><span>POISON</span></div>
+  <div class="brand">PROFEX-50</div>
+  <div class="comp">Profenofos 50% EC</div>
+  <div class="small">Emulsifiable Concentrate · Insecticide</div>
+  <div class="band">Net Contents: 500 ml</div>
+  <div class="small">Mfd. by: Sample Crop Sciences Ltd., Ankleshwar (GJ)<br>
+  CIR No.: 98,456/2021-Profenofos (EC) (Demo)-07<br>
+  Batch: PF2309 &nbsp; Mfg: 06/2023 &nbsp; Exp: 05/2025</div>
+</div>
+
+<div class="label" id="l3">
+  <div class="tri green"><span>CAUTION</span></div>
+  <div class="brand">SUPER ACTARA GOLD</div>
+  <div class="comp">Thiamethoxam 30% EC</div>
+  <div class="small">Extra power formula · Fast action on all sucking pests</div>
+  <div class="band">Net Contents: 250 ml</div>
+  <div class="small">Marketed by: Super Agro Traders<br>Batch: SAG-11</div>
+</div>
+
+<div class="label" id="l4">
+  <div class="tri blue"><span>CAUTION</span></div>
+  <div class="brand">DUOSHIELD</div>
+  <div class="comp">Chlorantraniliprole 9.3% + Lambda-cyhalothrin 4.6% ZC</div>
+  <div class="small">Mixed formulation (CS + SC). For bollworms in cotton and stem borer in paddy.</div>
+  <div class="band">Net Contents: 200 ml</div>
+  <div class="small">Mfd. by: Demo Agro Formulations Pvt. Ltd.<br>
+  CIR No.: 99,777/2025-CTPR+LCT (ZC) (Demo)-02<br>
+  Batch: DS-0526 &nbsp; Mfg: 05/2026 &nbsp; Exp: 04/2028</div>
+</div>
+
+<div class="label deva" id="l5">
+  <div class="tri yellow"><span>POISON</span></div>
+  <div class="brand">किसान कवच</div>
+  <div class="comp">इमिडाक्लोप्रिड 17.8% एस.एल. (Imidacloprid 17.8% SL)</div>
+  <div class="small">कपास में सफ़ेद मक्खी, हरा तेला और माहू के नियंत्रण के लिए।</div>
+  <div class="band">शुद्ध मात्रा: 250 मि.ली.</div>
+  <div class="small">निर्माता: डेमो एग्रो लिमिटेड, नागपुर<br>
+  CIR No.: 97,321/2022-Imidacloprid (SL) (Demo)-04<br>
+  बैच: KK-19 &nbsp; निर्माण: 03/2026 &nbsp; समाप्ति: 02/2028</div>
+</div>
+
+<div class="label bill" id="l6">
+  <div style="font-size:18px;font-weight:700">JAI KISAN KRISHI SEVA KENDRA</div>
+  <div class="small">Main Road, Ner, Dist. Yavatmal · GSTIN 27XXXXX(demo)</div>
+  <div class="small">Bill No. 2214 &nbsp;&nbsp; Date: 04/10/2026 &nbsp;&nbsp; Customer: Suresh</div>
+  <table>
+    <tr><th>#</th><th>Item</th><th>Qty</th><th>Amt</th></tr>
+    <tr><td>1</td><td>Pegasus (Diafenthiuron 50% WP)</td><td>500 g</td><td>820</td></tr>
+    <tr><td>2</td><td>Lambda Cyhalothrin 5% EC</td><td>250 ml</td><td>210</td></tr>
+    <tr><td>3</td><td>Ulala (Flonicamid 50% WG)</td><td>150 g</td><td>690</td></tr>
+  </table>
+  <div class="small" style="text-align:right;font-weight:700">Total: Rs 1,720</div>
+</div>
+</body></html>

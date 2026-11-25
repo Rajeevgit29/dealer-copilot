@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Keep the dev overlay badge out of demo screenshots.
+  devIndicators: false,
   turbopack: {
     rules: {
       "*.css": {

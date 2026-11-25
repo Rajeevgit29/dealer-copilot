@@ -1,26 +1,48 @@
 {
-  "name": "dealer-copilot.nosync",
+  "name": "dealer-copilot",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4700",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start -p 4700",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "db:migrate": "tsx db/migrate.ts",
+    "db:seed": "tsx db/seed.ts",
+    "db:setup": "tsx db/migrate.ts && tsx db/seed.ts",
+    "data:download": "bash data/pipeline/download.sh",
+    "data:extract": "python3 -I data/pipeline/extract_mup.py --insecticide data/raw/mup_insecticide_2026.pdf --fungicide data/raw/mup_fungicide_2026.pdf --as-on 2026-09-30 --out data/generated/approved_uses.json",
+    "eval": "tsx eval/run-eval.ts",
+    "eval:labels": "tsx eval/run-label-eval.ts"
   },
   "dependencies": {
-    "next": "16.4.4",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.80.0",
+    "next": "^16.4.6",
+    "pg": "^8.23.1",
+    "qrcode": "^1.5.4",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-leaflet": "^5.0.0",
+    "recharts": "^3.11.1",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
+    "@types/leaflet": "^1.9.23",
+    "@types/node": "^24.19.4",
+    "@types/pg": "^8.23.1",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.4",
+    "eslint-config-next": "^16.4.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.1.2"
   }
 }

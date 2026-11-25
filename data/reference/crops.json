@@ -1,0 +1,8 @@
+{
+  "crops": [
+    { "id": "cotton", "en": "Cotton", "hi": "कपास", "firstHarvestDays": 120, "multiPick": true, "flowering": [55, 120] },
+    { "id": "paddy", "en": "Paddy (rice)", "hi": "धान", "firstHarvestDays": 120, "multiPick": false, "flowering": null },
+    { "id": "tomato", "en": "Tomato", "hi": "टमाटर", "firstHarvestDays": 70, "multiPick": true, "flowering": [30, 90] },
+    { "id": "chilli", "en": "Chilli", "hi": "मिर्च", "firstHarvestDays": 80, "multiPick": true, "flowering": [40, 130] }
+  ]
+}

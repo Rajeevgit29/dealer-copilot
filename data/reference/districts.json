@@ -1,0 +1,21 @@
+{
+  "about": "Demo districts with approximate centroid coordinates (used for the weather spray window and the insights map).",
+  "districts": [
+    { "id": "yavatmal", "name": "Yavatmal", "state": "Maharashtra", "lat": 20.39, "lon": 78.12, "crops": ["cotton"] },
+    { "id": "wardha", "name": "Wardha", "state": "Maharashtra", "lat": 20.74, "lon": 78.6, "crops": ["cotton"] },
+    { "id": "amravati", "name": "Amravati", "state": "Maharashtra", "lat": 20.93, "lon": 77.75, "crops": ["cotton"] },
+    { "id": "akola", "name": "Akola", "state": "Maharashtra", "lat": 20.7, "lon": 77.0, "crops": ["cotton"] },
+    { "id": "jalna", "name": "Jalna", "state": "Maharashtra", "lat": 19.84, "lon": 75.88, "crops": ["cotton"] },
+    { "id": "jalgaon", "name": "Jalgaon", "state": "Maharashtra", "lat": 21.0, "lon": 75.56, "crops": ["cotton"] },
+    { "id": "adilabad", "name": "Adilabad", "state": "Telangana", "lat": 19.66, "lon": 78.53, "crops": ["cotton"] },
+    { "id": "warangal", "name": "Warangal", "state": "Telangana", "lat": 17.97, "lon": 79.59, "crops": ["cotton", "chilli"] },
+    { "id": "khammam", "name": "Khammam", "state": "Telangana", "lat": 17.25, "lon": 80.15, "crops": ["chilli", "paddy"] },
+    { "id": "guntur", "name": "Guntur", "state": "Andhra Pradesh", "lat": 16.31, "lon": 80.44, "crops": ["chilli", "paddy"] },
+    { "id": "bathinda", "name": "Bathinda", "state": "Punjab", "lat": 30.21, "lon": 74.95, "crops": ["cotton", "paddy"] },
+    { "id": "sirsa", "name": "Sirsa", "state": "Haryana", "lat": 29.53, "lon": 75.03, "crops": ["cotton"] },
+    { "id": "raichur", "name": "Raichur", "state": "Karnataka", "lat": 16.2, "lon": 77.36, "crops": ["paddy", "cotton"] },
+    { "id": "thanjavur", "name": "Thanjavur", "state": "Tamil Nadu", "lat": 10.79, "lon": 79.14, "crops": ["paddy"] },
+    { "id": "kolar", "name": "Kolar", "state": "Karnataka", "lat": 13.14, "lon": 78.13, "crops": ["tomato"] },
+    { "id": "nashik", "name": "Nashik", "state": "Maharashtra", "lat": 20.0, "lon": 73.79, "crops": ["tomato"] }
+  ]
+}

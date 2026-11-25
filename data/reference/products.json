@@ -1,0 +1,32 @@
+{
+  "about": "Brand catalogue: brand name -> registered formulation. Compiled from public product listings for this prototype; verify each against the physical label before production use. Every other registered formulation is also available as a generic 'any brand' entry, derived at runtime from the approved-use table.",
+  "products": [
+    { "id": "syn-actara", "brand": "Actara", "company": "Syngenta", "actives": [["thiamethoxam", 25]], "formType": "WG", "packs": [100, 250, 500] },
+    { "id": "syn-alika", "brand": "Alika", "company": "Syngenta", "actives": [["thiamethoxam", 12.6], ["lambda-cyhalothrin", 9.5]], "formType": "ZC", "packs": [80, 200, 500] },
+    { "id": "syn-ampligo", "brand": "Ampligo", "company": "Syngenta", "actives": [["chlorantraniliprole", 9.3], ["lambda-cyhalothrin", 4.6]], "formType": "ZC", "packs": [80, 200, 500] },
+    { "id": "syn-voliam-flexi", "brand": "Voliam Flexi", "company": "Syngenta", "actives": [["chlorantraniliprole", 8.8], ["thiamethoxam", 17.5]], "formType": "SC", "packs": [100, 250] },
+    { "id": "syn-karate", "brand": "Karate", "company": "Syngenta", "actives": [["lambda-cyhalothrin", 5]], "formType": "EC", "packs": [100, 250, 500, 1000] },
+    { "id": "syn-pegasus", "brand": "Pegasus", "company": "Syngenta", "actives": [["diafenthiuron", 50]], "formType": "WP", "packs": [100, 250, 500, 1000] },
+    { "id": "syn-proclaim", "brand": "Proclaim", "company": "Syngenta", "actives": [["emamectin benzoate", 5]], "formType": "SG", "packs": [50, 100, 250] },
+    { "id": "syn-curacron", "brand": "Curacron", "company": "Syngenta", "actives": [["profenofos", 50]], "formType": "EC", "packs": [250, 500, 1000] },
+    { "id": "syn-ekalux", "brand": "Ekalux", "company": "Syngenta", "actives": [["quinalphos", 25]], "formType": "EC", "packs": [250, 500, 1000] },
+    { "id": "syn-amistar", "brand": "Amistar", "company": "Syngenta", "actives": [["azoxystrobin", 23]], "formType": "SC", "packs": [100, 200, 500] },
+    { "id": "syn-amistar-top", "brand": "Amistar Top", "company": "Syngenta", "actives": [["azoxystrobin", 18.2], ["difenoconazole", 11.4]], "formType": "SC", "packs": [100, 200, 500] },
+    { "id": "syn-score", "brand": "Score", "company": "Syngenta", "actives": [["difenoconazole", 25]], "formType": "EC", "packs": [100, 250, 500] },
+    { "id": "syn-tilt", "brand": "Tilt", "company": "Syngenta", "actives": [["propiconazole", 25]], "formType": "EC", "packs": [100, 250, 500, 1000] },
+    { "id": "syn-revus", "brand": "Revus", "company": "Syngenta", "actives": [["mandipropamid", 23.4]], "formType": "SC", "packs": [100, 250, 500] },
+    { "id": "syn-kavach", "brand": "Kavach", "company": "Syngenta", "actives": [["chlorothalonil", 75]], "formType": "WP", "packs": [250, 500, 1000] },
+
+    { "id": "bay-confidor", "brand": "Confidor", "company": "Bayer", "actives": [["imidacloprid", 17.8]], "formType": "SL", "packs": [50, 100, 250, 500] },
+    { "id": "bay-oberon", "brand": "Oberon", "company": "Bayer", "actives": [["spiromesifen", 22.9]], "formType": "SC", "packs": [100, 250, 500] },
+    { "id": "bay-fame", "brand": "Fame", "company": "Bayer", "actives": [["flubendiamide", 39.35]], "formType": "SC", "packs": [25, 50, 100] },
+    { "id": "bay-nativo", "brand": "Nativo", "company": "Bayer", "actives": [["tebuconazole", 50], ["trifloxystrobin", 25]], "formType": "WG", "packs": [100, 200, 500] },
+    { "id": "bay-antracol", "brand": "Antracol", "company": "Bayer", "actives": [["propineb", 70]], "formType": "WP", "packs": [250, 500, 1000] },
+    { "id": "fmc-coragen", "brand": "Coragen", "company": "FMC", "actives": [["chlorantraniliprole", 18.5]], "formType": "SC", "packs": [30, 60, 150] },
+    { "id": "fmc-avaunt", "brand": "Avaunt", "company": "FMC", "actives": [["indoxacarb", 14.5]], "formType": "SC", "packs": [80, 200, 500] },
+    { "id": "cor-tracer", "brand": "Tracer", "company": "Corteva", "actives": [["spinosad", 45]], "formType": "SC", "packs": [37.5, 75, 150] },
+    { "id": "cor-delegate", "brand": "Delegate", "company": "Corteva", "actives": [["spinetoram", 11.7]], "formType": "SC", "packs": [75, 180, 450] },
+    { "id": "upl-ulala", "brand": "Ulala", "company": "UPL", "actives": [["flonicamid", 50]], "formType": "WG", "packs": [60, 150, 300] },
+    { "id": "upl-lancer-gold", "brand": "Lancer Gold", "company": "UPL", "actives": [["acephate", 50], ["imidacloprid", 1.8]], "formType": "SP", "packs": [250, 500, 1000] }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "about": "Synthetic label and bill images with fictional brands and demo registration numbers, rendered from labels.html. Ground truth for the label reader. Replace or extend with real photos from a shop (same format).",
+  "fixtures": [
+    { "file": "l1.png", "kind": "label", "items": [{ "formKey": "thiamethoxam@25|WG", "registered": true, "mustNotHaveChecks": ["Expired"] }] },
+    { "file": "l2.png", "kind": "label", "items": [{ "formKey": "profenofos@50|EC", "registered": true, "mustHaveChecks": ["Expired"] }] },
+    { "file": "l3.png", "kind": "label", "items": [{ "formKey": "thiamethoxam@30|EC", "registered": false, "mustHaveChecks": ["not in the CIB&RC registered list", "Brand \"Actara\" is normally", "No CIR registration number"] }] },
+    { "file": "l4.png", "kind": "label", "items": [{ "formKey": "chlorantraniliprole@9.3+lambda-cyhalothrin@4.6|ZC", "registered": true }] },
+    { "file": "l5.png", "kind": "label", "items": [{ "formKey": "imidacloprid@17.8|SL", "registered": true }] },
+    { "file": "l6.png", "kind": "bill", "items": [{ "formKey": "diafenthiuron@50|WP", "registered": true }, { "formKey": "lambda-cyhalothrin@5|EC", "registered": true }, { "formKey": "flonicamid@50|WG", "registered": true }] }
+  ]
+}
